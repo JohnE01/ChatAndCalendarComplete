@@ -53,4 +53,9 @@ class AuthController extends Controller
 
         return redirect()->route('login');
     }
+
+    // public function __construct()
+    // {
+    //     $this->middleware('admin');
+    // }
 }

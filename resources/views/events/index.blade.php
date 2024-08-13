@@ -44,6 +44,7 @@
                             <th style="background-color: #005cbf; color: #fff;">Start Time</th>
                             <th style="background-color: #005cbf; color: #fff;">End Time</th>
                             <th style="background-color: #005cbf; color: #fff;">Actions</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -116,10 +117,7 @@
                 });
             }
         });
-
-        function displayMessage(message) {
-            toastr.success(message, 'Event');
-        }
     });
 </script>
 @endsection
+

@@ -59,9 +59,7 @@
                 <h1>{{ $event->title }}</h1>
                 <p><strong>Start Time:</strong> {{ $event->start_time }}</p>
                 <p><strong>End Time:</strong> {{ $event->end_time }}</p>
-                @if($event->room)
                 <p><strong>Selected Room:</strong> {{ $event->room->name }}</p>
-                @endif
                 <p><strong>Selected Items:</strong></p>
                 <ul>
                     @foreach($event->items as $item)
@@ -77,7 +75,14 @@
                 @if($event->description)
                     <p><strong>Description:</strong> {{ $event->description }}</p>
                 @endif
-                
+                <div class="d-flex justify-content-center">
+                    
+                    <form action="{{ route('events.destroy', $event->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

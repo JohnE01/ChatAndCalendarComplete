@@ -2,108 +2,159 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register Page</title>
+    <meta name="author" content="rkive">
+    <link rel="icon" href="{{ asset('assets/images/favicon7.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon7.png') }}" type="image/x-icon">
+    <title>Register - Rkive</title>
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
+    @include('layouts.css')
     <style>
-        body {
-            background-color: #f0f2f5; /* Light violet background */
-            font-family: Arial, sans-serif; /* Use a common sans-serif font */
+        .right {
+            background-color: #dde0fc;
         }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        .left {
+            background-color: #312B70;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.99'%3E%3Cpolygon fill='%232c2765' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%23272259' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%23211d4c' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%231a163b' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%230F0D22' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .left div {
+            margin: 20% 10%;
         }
 
         .card {
             width: 400px;
-            background-color: #fff; /* White background for the card */
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Drop shadow effect */
-            padding: 20px; /* Add padding for spacing inside the card */
         }
 
-        .card-title {
-            text-align: center; /* Center the title */
-            margin-bottom: 20px; /* Add space below the title */
+        @media (max-width: 700px) {
+            .card {
+                width: 70%;
+            }
         }
 
-        .form-label {
-            font-weight: bold; /* Bold font for form labels */
+        #logo {
+            height: 100px;
+            width: auto;
+            margin: 0;
+            transform: translateY(0);
+            animation: mover 2s infinite alternate;
         }
 
-        .btn-primary {
-            background-color: #6c5ce7; /* Light violet button color */
-            color: #fff; /* White text color */
-            border: none; /* Remove border */
-            padding: 10px 20px; /* Add padding to the button */
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Add pointer cursor on hover */
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
+        #mode {
+            height: 75px;
+            width: auto;
+            margin: 0;
         }
 
-        .btn-primary:hover {
-            background-color: #5245b5; /* Darker violet color on hover */
+        @keyframes mover {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-20px);
+            }
         }
 
-        .text-primary {
-            color: #6c5ce7; /* Light violet text color */
+        @media (max-width: 576px) {
+            h5 {
+                font-size: 14px;
+            }
         }
 
-        .alert-danger {
-            color: #721c24; /* Dark red color for alert text */
-            background-color: #f8d7da; /* Light red background color for alerts */
-            border-color: #f5c6cb; /* Red border color for alerts */
-            padding: 15px; /* Add padding for spacing inside the alert */
-            margin-bottom: 20px; /* Add space below the alert */
-            border-radius: 5px; /* Rounded corners */
+        @media (max-width: 768px) {
+            h4 {
+                font-size: 16px;
+            }
+
+            .right {
+                background-color: #312B70;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.99'%3E%3Cpolygon fill='%232c2765' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%23272259' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%23211d4c' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%231a163b' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%230F0D22' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E");
+                background-attachment: fixed;
+                background-size: cover;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-title">
-                <h3>Register</h3>
-            </div>
-            <div class="card-body">
-                @if (Session::has('error'))
-                    <div class="alert alert-danger" role="alert">
-                        <strong>Email sudah digunakan</strong>
+    <div class="loader-wrapper">
+        <div class="loader-index"><span></span></div>
+        <svg>
+            <defs></defs>
+            <filter id="goo">
+                <fegaussianblur in="SourceGraphic" stddeviation="11" result="blur"></fegaussianblur>
+                <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo">
+                </fecolormatrix>
+            </filter>
+        </svg>
+    </div>
+    <div class="tap-top"><i data-feather="chevrons-up"></i></div>
+    <div class="page-wrapper compact-wrapper" id="pageWrapper">
+        <div class="page-body-wrapper">
+            <div class="container-fluid p-0">
+                <div class="row m-0">
+                    <div class="col-6 left d-none d-md-block d-sm-none text-white">
+                        <div>
+                            <img src="{{ asset('assets/images/logo/logo1.png') }}" alt="" id="logo">
+                            <h1>Rkive</h1>
+                            <h4 class="d-lg-none">Administrative Solutions</h4>
+                            <p>Your administrative needs in one place</p>
+                        </div>
                     </div>
-                @endif
-                <form action="{{ route('register') }}" method="post">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" required
-                            placeholder="Enter your name">
+                    <div class="col p-0 right">
+                        <div class="login-card">
+                            <div class="card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="col title text-center justify-content-center">
+                                        <img src="{{ asset('assets/images/logo/logo1.png') }}" alt=""
+                                            style="height: 50px; width:auto;" class="col-3 d-lg-none">
+                                        <h5 class="col text-dark p-2 pt-2 mt-1 text-center">Create a new account
+                                        </h5>
+                                        <button class="btn btn-primary mt-2" onclick="window.location.href='/login'">Sign in</button>
+                                    </div>
+                                </div>
+                                @if (Session::has('error'))
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>{{ Session::get('error') }}</strong>
+                                    </div>
+                                @endif
+                                <form action="{{ route('register') }}" method="post">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" required
+                                            aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" required
+                                            aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required
+                                            aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="d-grid mb-3">
+                                        <button class="btn btn-primary">Register</button>
+                                    </div>
+                                </form>
+                             </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" required
-                            placeholder="Enter your email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" required
-                            placeholder="Enter your password">
-                    </div>
-                    <div class="d-grid mb-3">
-                        <button class="btn btn-primary" type="submit">Submit</button>
-                    </div>
-                    <div class="mb-3">
-                        <a href="{{ route('login') }}" class="text-primary">Already have an account? Login</a>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/form-validation-custom.js') }}"></script>
+    @include('layouts.script')
 </body>
 
 </html>

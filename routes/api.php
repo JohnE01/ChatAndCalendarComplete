@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TravelController;
 use App\Http\Controllers\Api\ApiEventsDataController;
+use App\Http\Controllers\Api\TaskController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,3 +29,9 @@ Route::delete('/travel-data/{id}', [TravelController::class, 'destroy']);
 
 Route::get('/events-data', [ApiEventsDataController::class, 'index']);
 Route::get('/events-data/{id}', [ApiEventsDataController::class, 'show']);
+
+Route::get('/task-data', [TaskController::class, 'index']);
+Route::get('/task-data/{id}', [TaskController::class, 'show']);
+Route::post('/task-data', [TaskController::class, 'store']);
+Route::put('/task-data/{id}', [TaskController::class, 'update']);
+Route::delete('/task-data/{id}', [TaskController::class, 'destroy']);

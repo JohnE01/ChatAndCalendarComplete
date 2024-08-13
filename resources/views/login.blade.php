@@ -90,7 +90,7 @@
         }
     </style>
 </head>
-
+<!-- <a href="{{ route('portfolio.index') }}" class="portfolio-btn">View My Profile</a> -->
 <body
     @if (Route::current()->getName() == 'index') onload="startTime()" @elseif (Route::current()->getName() == 'button-builder') class="button-builder" @endif>
     <div class="loader-wrapper">
@@ -130,8 +130,9 @@
                                             <img src="{{ asset('assets/images/logo/logo1.png') }}" alt=""
                                                     style="height: 50px; width:auto;" class="col-3 d-lg-none">
                                             <h5 class="col text-dark p-2 pt-2 mt-1 text-center">Sign in to your
-                                                    account
+                                                    account or
                                             </h5>
+                                            <button class="btn btn-primary mt-2" onclick="window.location.href='/register'">Sign up</button>
                                         </div>
                                     </div>
                                         @if (Session::has('error'))

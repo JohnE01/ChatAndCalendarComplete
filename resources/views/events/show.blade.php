@@ -72,17 +72,23 @@
                         <li>{{ $task->name }}</li>
                     @endforeach
                 </ul>
+                <!-- Display selected budget name and amount -->
+                @if($event->budget_name && $event->budget_amount)
+                    <p><strong>Selected Budget:</strong> {{ $event->budget_name }} - ${{ $event->budget_amount }}</p>
+                @else
+                    <p><strong>No Budget Assigned</strong></p>
+                @endif
                 @if($event->description)
                     <p><strong>Description:</strong> {{ $event->description }}</p>
                 @endif
-                <div class="d-flex justify-content-center">
+                <!-- <div class="d-flex justify-content-center">
                     <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary">Edit</a>
                     <form action="{{ route('events.destroy', $event->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

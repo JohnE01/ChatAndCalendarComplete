@@ -11,7 +11,8 @@ use App\Models\Event;
 use App\Models\Room;
 use App\Models\Item;
 use App\Models\Task;
-
+use App\Models\Budget; 
+use Illuminate\Support\Facades\Http; // Add this line to import the Http facade
 
 class EventController extends Controller
 {
@@ -31,14 +32,19 @@ class EventController extends Controller
         $availableRooms = Room::all(); // Fetch all available rooms
         $items = Item::all(); // Fetch all items from the database
         $tasks = Task::all();
+        $budgets = Budget::all(); // Retrieve all budgets
 
-        return view('events.create', compact('availableRooms','items' ,'tasks'));
+        return view('events.create', compact('availableRooms','items' ,'tasks','budgets'));
     }
 
     public function store(Request $request)
     {
+        // Validate incoming request
         $request->validate([
-            // Your validation rules...
+            'room_id' => 'required|exists:g51_rooms,id',
+            'item_ids' => 'array',
+            'task_ids' => 'array',
+            'budget_id' => 'nullable|exists:budgets,id',
         ]);
     
         // Retrieve the selected room
@@ -55,66 +61,33 @@ class EventController extends Controller
         }
     
         // Attach selected items to the event
-        $event->items()->attach($request->input('item_ids', []));
-    
-        // Attach selected tasks to the event
-        $event->tasks()->attach($request->input('task_ids', []));
-    
-        return redirect()->route('events.index')->with('success', 'Event created successfully.');
-    }
-    
-
-    public function show(Event $event)
-    {
-        return view('events.show', compact('event'));
-    }
-
-    public function edit(Event $event)
-    {
-        $availableItems = Item::all(); // Replace with your actual logic
-        $availableRooms = Room::all(); // Replace with your actual logic
-        $tasks = Task::all(); // Replace with your actual logic
-    
-        return view('events.edit', compact('event', 'availableItems', 'availableRooms', 'tasks'));
-    }
-    public function update(Request $request, Event $event)
-    {
-        $request->validate([
-            'title' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'room_id' => 'nullable|exists:rooms,id',
-            'item_ids' => 'array',
-            'task_ids' => 'array',
-            'description' => 'nullable|string',
-            // Add other fields that you want to validate/update
-        ]);
-    
-        // Retrieve the selected room
-        $selectedRoom = Room::find($request->input('room_id'));
-    
-        // Update the event
-        $event->update($request->except(['_token', '_method', 'room_id', 'item_ids', 'task_ids']));
-    
-        // Associate the selected room with the event
-        if ($selectedRoom) {
-            $event->room()->associate($selectedRoom);
-            $event->save();
-        } else {
-            // If no room is selected, detach the existing room
-            $event->room()->dissociate();
-            $event->save();
+        if ($request->has('item_ids')) {
+            $event->items()->attach($request->input('item_ids', []));
         }
     
-        // Sync selected items with the event
-        $event->items()->sync($request->input('item_ids', []));
+        // Attach selected tasks to the event
+        if ($request->has('task_ids')) {
+            $event->tasks()->attach($request->input('task_ids', []));
+        }
     
-        // Sync selected tasks with the event
-        $event->tasks()->sync($request->input('task_ids', []));
+        // Retrieve the selected budget ID from the request
+        $budgetId = $request->input('budget_id');
     
-        return redirect()->route('events.show', $event->id)->with('success', 'Event updated successfully.');
-    }
+        // Check if a budget ID was selected
+        if ($budgetId) {
+            // Fetch the budget details from the database
+            $budget = Budget::findOrFail($budgetId);
     
+            // Assign the budget name and amount to the event
+            $event->budget_name = $budget->budget_name;
+            $event->budget_amount = $budget->budget_amount;
+        }
+    
+        // Save the event
+        $event->save();
+    
+        return redirect()->route('events.index')->with('success', 'Events created successfully.');
+    }    
 
     public function destroy(Event $event)
     {
@@ -123,19 +96,21 @@ class EventController extends Controller
         return redirect()->route('events.index')->with('success', 'Event deleted successfully.');
     }
 
-    public function getEvents()
+    public function getEvents(Request $request)
     {
+        // Retrieve events from the database
         $events = Event::all();
-        $formattedEvents = [];
 
-        foreach ($events as $event) {
-            $formattedEvents[] = [
+        // Transform events data into the format expected by FullCalendar
+        $formattedEvents = $events->map(function ($event) {
+            return [
                 'title' => $event->title,
                 'start' => $event->start_time,
-                'end' => $event->end_time,
+                'end' => $event->end_time
             ];
-        }
+        });
 
+        // Return events data as JSON response
         return response()->json($formattedEvents);
     }
 }

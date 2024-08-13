@@ -91,6 +91,16 @@
                 </div>
 
                 <div class="form-group">
+    <label for="budget_id">Select Needed Budget</label>
+    <select name="budget_id" class="form-control">
+        @foreach($budgets as $budget)
+            <option value="{{ $budget->id }}">{{ $budget->budget_name }} - ${{ $budget->budget_amount }}</option>
+        @endforeach
+    </select>
+</div>
+
+
+                <div class="form-group">
                     <label for="description">Description</label>
                     <textarea name="description" id="description" class="form-control" rows="5">{{ $event->description }}</textarea>
                 </div>
